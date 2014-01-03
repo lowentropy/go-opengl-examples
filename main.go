@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/go-gl/gl"
 	glfw "github.com/go-gl/glfw3"
-	// "math"
 	"io/ioutil"
 	"runtime"
 	"time"
@@ -67,16 +66,15 @@ func initGlfw() {
 	glfw.WindowHint(glfw.OpenglProfile, glfw.OpenglCoreProfile)
 
 	var mon *glfw.Monitor
+	var err error
 
 	if fullscreen {
-		var err error
 		mon, err = glfw.GetPrimaryMonitor()
 		if err != nil {
 			panic(err)
 		}
 	}
 
-	var err error
 	window, err = glfw.CreateWindow(640, 480, "Testing", mon, nil)
 	if err != nil {
 		panic(err)
@@ -87,8 +85,8 @@ func initGlfw() {
 
 func initGl() {
 	gl.Init()
-	fmt.Println(gl.GetString(gl.VERSION))
-	fmt.Println(gl.GetString(gl.SHADING_LANGUAGE_VERSION))
+	fmt.Println("OpenGL Version:", gl.GetString(gl.VERSION))
+	fmt.Println("Shader Version:", gl.GetString(gl.SHADING_LANGUAGE_VERSION))
 }
 
 func initScene() {
@@ -132,17 +130,19 @@ func attachShaders() {
 	program.BindFragDataLocation(0, "outColor")
 	program.Link()
 	program.Use()
+
+	// pos is the first two floats on a five-float line (stride 5, offset 0)
 	pos := program.GetAttribLocation("position")
 	pos.AttribPointer(2, gl.FLOAT, false, 5*4, uintptr(0))
 	pos.EnableArray()
+
+	// color is the last three floats on a five-float line (stride 5, offset 2)
 	color = program.GetAttribLocation("color")
 	color.AttribPointer(3, gl.FLOAT, false, 5*4, uintptr(2*4))
 	color.EnableArray()
 }
 
 func drawScene() {
-	// t := time.Now().Sub(t0).Seconds()
-	// color.Uniform3f(float32(math.Sin(t*4)), 0, 0)
 	gl.DrawArrays(gl.TRIANGLES, 0, 3)
 }
 
