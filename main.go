@@ -1,20 +1,19 @@
 package main
 
 import (
-	"bitbucket.org/zombiezen/math3/mat32"
-	"bitbucket.org/zombiezen/math3/vec32"
+	// "bitbucket.org/zombiezen/math3/mat32"
+	// "bitbucket.org/zombiezen/math3/vec32"
 	"fmt"
+	"github.com/Jragonmiris/mathgl"
 	"github.com/go-gl/gl"
 	glfw "github.com/go-gl/glfw3"
 	"image"
 	_ "image/jpeg"
 	_ "image/png"
 	"io/ioutil"
-	"math"
 	"os"
 	"runtime"
 	"time"
-	"unsafe"
 )
 
 func errorCallback(err glfw.ErrorCode, desc string) {
@@ -222,10 +221,6 @@ func attachShaders() {
 	trans = program.GetUniformLocation("trans")
 }
 
-func setMatrix(loc gl.UniformLocation, m *mat32.Matrix) {
-	loc.UniformMatrix4f(false, (*[16]float32)((unsafe.Pointer)(m)))
-}
-
 func drawScene() {
 	// clear the background
 	gl.ClearColor(0, 0, 0, 1)
@@ -236,8 +231,8 @@ func drawScene() {
 	uniTime.Uniform1f(t)
 
 	// set the shader transform matrix
-	m := mat32.Identity.Rotate(t*math.Pi, vec32.Vector{0, 0, 1, 0})
-	setMatrix(trans, &m)
+	m := mathgl.HomogRotate3DZ(t * 180)
+	trans.UniformMatrix4f(false, (*[16]float32)(&m))
 
 	// draw a rectangle
 	gl.DrawElements(gl.TRIANGLES, 6, gl.UNSIGNED_INT, uintptr(0))
