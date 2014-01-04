@@ -24,15 +24,61 @@ var (
 	fullscreen = false
 	mainCh     = make(chan func(), 10)
 	vertices   = [...]float32{
-		-0.5, 0.5, 1.0, 0.0, 0.0, 0.0, 0.0, // top left
-		0.5, 0.5, 0.0, 1.0, 0.0, 1.0, 0.0, // top right
-		0.5, -0.5, 0.0, 0.0, 1.0, 1.0, 1.0, // bot right
-		-0.5, -0.5, 1.0, 1.0, 1.0, 0.0, 1.0, // bot left
+		// X, Y, Z, R, G, B, U, V
+		-0.5, -0.5, -0.5, 1.0, 1.0, 1.0, 0.0, 0.0,
+		0.5, -0.5, -0.5, 1.0, 1.0, 1.0, 1.0, 0.0,
+		0.5, 0.5, -0.5, 1.0, 1.0, 1.0, 1.0, 1.0,
+		0.5, 0.5, -0.5, 1.0, 1.0, 1.0, 1.0, 1.0,
+		-0.5, 0.5, -0.5, 1.0, 1.0, 1.0, 0.0, 1.0,
+		-0.5, -0.5, -0.5, 1.0, 1.0, 1.0, 0.0, 0.0,
+
+		-0.5, -0.5, 0.5, 1.0, 1.0, 1.0, 0.0, 0.0,
+		0.5, -0.5, 0.5, 1.0, 1.0, 1.0, 1.0, 0.0,
+		0.5, 0.5, 0.5, 1.0, 1.0, 1.0, 1.0, 1.0,
+		0.5, 0.5, 0.5, 1.0, 1.0, 1.0, 1.0, 1.0,
+		-0.5, 0.5, 0.5, 1.0, 1.0, 1.0, 0.0, 1.0,
+		-0.5, -0.5, 0.5, 1.0, 1.0, 1.0, 0.0, 0.0,
+
+		-0.5, 0.5, 0.5, 1.0, 1.0, 1.0, 1.0, 0.0,
+		-0.5, 0.5, -0.5, 1.0, 1.0, 1.0, 1.0, 1.0,
+		-0.5, -0.5, -0.5, 1.0, 1.0, 1.0, 0.0, 1.0,
+		-0.5, -0.5, -0.5, 1.0, 1.0, 1.0, 0.0, 1.0,
+		-0.5, -0.5, 0.5, 1.0, 1.0, 1.0, 0.0, 0.0,
+		-0.5, 0.5, 0.5, 1.0, 1.0, 1.0, 1.0, 0.0,
+
+		0.5, 0.5, 0.5, 1.0, 1.0, 1.0, 1.0, 0.0,
+		0.5, 0.5, -0.5, 1.0, 1.0, 1.0, 1.0, 1.0,
+		0.5, -0.5, -0.5, 1.0, 1.0, 1.0, 0.0, 1.0,
+		0.5, -0.5, -0.5, 1.0, 1.0, 1.0, 0.0, 1.0,
+		0.5, -0.5, 0.5, 1.0, 1.0, 1.0, 0.0, 0.0,
+		0.5, 0.5, 0.5, 1.0, 1.0, 1.0, 1.0, 0.0,
+
+		-0.5, -0.5, -0.5, 1.0, 1.0, 1.0, 0.0, 1.0,
+		0.5, -0.5, -0.5, 1.0, 1.0, 1.0, 1.0, 1.0,
+		0.5, -0.5, 0.5, 1.0, 1.0, 1.0, 1.0, 0.0,
+		0.5, -0.5, 0.5, 1.0, 1.0, 1.0, 1.0, 0.0,
+		-0.5, -0.5, 0.5, 1.0, 1.0, 1.0, 0.0, 0.0,
+		-0.5, -0.5, -0.5, 1.0, 1.0, 1.0, 0.0, 1.0,
+
+		-0.5, 0.5, -0.5, 1.0, 1.0, 1.0, 0.0, 1.0,
+		0.5, 0.5, -0.5, 1.0, 1.0, 1.0, 1.0, 1.0,
+		0.5, 0.5, 0.5, 1.0, 1.0, 1.0, 1.0, 0.0,
+		0.5, 0.5, 0.5, 1.0, 1.0, 1.0, 1.0, 0.0,
+		-0.5, 0.5, 0.5, 1.0, 1.0, 1.0, 0.0, 0.0,
+		-0.5, 0.5, -0.5, 1.0, 1.0, 1.0, 0.0, 1.0,
+
+		-2.0, -2.0, -0.5, 0.0, 0.0, 0.0, 0.0, 0.0,
+		2.0, -2.0, -0.5, 0.0, 0.0, 0.0, 1.0, 0.0,
+		2.0, 2.0, -0.5, 0.0, 0.0, 0.0, 1.0, 1.0,
+		2.0, 2.0, -0.5, 0.0, 0.0, 0.0, 1.0, 1.0,
+		-2.0, 2.0, -0.5, 0.0, 0.0, 0.0, 0.0, 1.0,
+		-2.0, -2.0, -0.5, 0.0, 0.0, 0.0, 0.0, 0.0,
 	}
-	elements = [...]uint32{
-		0, 1, 2,
-		2, 3, 0,
-	}
+
+	frames = 0
+	angle  = float32(-45)
+	speed  = float32(0)
+
 	vao          gl.VertexArray
 	vertexShader gl.Shader
 	fragShader   gl.Shader
@@ -40,8 +86,9 @@ var (
 	color        gl.AttribLocation
 	t0           time.Time
 	window       *glfw.Window
+	uniColor     gl.UniformLocation
 	uniTime      gl.UniformLocation
-	trans        gl.UniformLocation
+	uniModel     gl.UniformLocation
 )
 
 func main() {
@@ -60,6 +107,8 @@ func loop() {
 	if window.GetKey(glfw.KeyEscape) == glfw.Press {
 		window.SetShouldClose(true)
 		return
+	} else if window.GetKey(glfw.KeySpace) == glfw.Press {
+		speed = 180
 	}
 	drawScene()
 	window.SwapBuffers()
@@ -106,11 +155,13 @@ func initScene() {
 	t0 = time.Now()
 	vao = gl.GenVertexArray()
 	vao.Bind()
+	gl.Enable(gl.DEPTH_TEST)
 	loadVertexBuf()
 	loadElemBuf()
 	loadShaders()
 	attachShaders()
 	loadTextures()
+	setViewAndProj()
 }
 
 func loadImageData(path string) ([]byte, int, int) {
@@ -164,9 +215,9 @@ func loadVertexBuf() {
 }
 
 func loadElemBuf() {
-	buf := gl.GenBuffer()
-	buf.Bind(gl.ELEMENT_ARRAY_BUFFER)
-	gl.BufferData(gl.ELEMENT_ARRAY_BUFFER, len(elements)*4, &elements, gl.STATIC_DRAW)
+	// buf := gl.GenBuffer()
+	// buf.Bind(gl.ELEMENT_ARRAY_BUFFER)
+	// gl.BufferData(gl.ELEMENT_ARRAY_BUFFER, len(elements)*4, &elements, gl.STATIC_DRAW)
 }
 
 func loadShaders() {
@@ -197,45 +248,39 @@ func attachShaders() {
 	program.Link()
 	program.Use()
 
-	// position: stride 7, size 2, offset 0
+	// position: stride 8, size 3, offset 0
 	pos := program.GetAttribLocation("position")
-	pos.AttribPointer(2, gl.FLOAT, false, 7*4, uintptr(0))
+	pos.AttribPointer(3, gl.FLOAT, false, 8*4, uintptr(0))
 	pos.EnableArray()
 
-	// color: stride 7, size 3, offset 2
+	// color: stride 8, size 3, offset 3
 	color = program.GetAttribLocation("color")
-	color.AttribPointer(3, gl.FLOAT, false, 7*4, uintptr(2*4))
+	color.AttribPointer(3, gl.FLOAT, false, 8*4, uintptr(3*4))
 	color.EnableArray()
 
-	// texcoord: stride 7, size 2, offset 5
+	// texcoord: stride 8, size 2, offset 6
 	tc := program.GetAttribLocation("texcoord")
-	tc.AttribPointer(2, gl.FLOAT, false, 7*4, uintptr(5*4))
+	tc.AttribPointer(2, gl.FLOAT, false, 8*4, uintptr(6*4))
 	tc.EnableArray()
 
 	// bind texture interpolators
 	program.GetUniformLocation("tex0").Uniform1i(0)
 	program.GetUniformLocation("tex1").Uniform1i(1)
 
-	// get 'time' and 'trans' variables as global
+	// get 'time', 'model', and 'overrideColor' variables as global
 	uniTime = program.GetUniformLocation("time")
-	trans = program.GetUniformLocation("trans")
+	uniModel = program.GetUniformLocation("model")
+	uniColor = program.GetUniformLocation("overrideColor")
 }
 
-func drawScene() {
-	// clear the background
-	gl.ClearColor(0, 0, 0, 1)
-	gl.Clear(gl.COLOR_BUFFER_BIT)
+func setViewAndProj() {
+	loc := program.GetUniformLocation("view")
+	m := mathgl.LookAt(2.5, 2.5, 2, 0, 0, 0, 0, 0, 1)
+	loc.UniformMatrix4f(false, (*[16]float32)(&m))
 
-	// set shader 'time' variable
-	t := float32(time.Now().Sub(t0).Seconds())
-	uniTime.Uniform1f(t)
-
-	// set the shader transform matrix
-	m := mathgl.HomogRotate3DZ(t * 180)
-	trans.UniformMatrix4f(false, (*[16]float32)(&m))
-
-	// draw a rectangle
-	gl.DrawElements(gl.TRIANGLES, 6, gl.UNSIGNED_INT, uintptr(0))
+	loc = program.GetUniformLocation("proj")
+	m = mathgl.Perspective(45, 800/600, 1, 10)
+	loc.UniformMatrix4f(false, (*[16]float32)(&m))
 }
 
 // pass a function here to have it executed in
@@ -259,5 +304,51 @@ func flushMain() {
 		default:
 			return
 		}
+	}
+}
+
+func drawScene() {
+	// clear the background
+	gl.ClearColor(1, 1, 1, 1)
+	gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
+
+	// set shader 'time' variable
+	t := float32(time.Now().Sub(t0).Seconds())
+	uniTime.Uniform1f(t)
+
+	m := mathgl.HomogRotate3DZ(angle)                   // compute rotation matrix
+	uniModel.UniformMatrix4f(false, (*[16]float32)(&m)) // store as model transform
+
+	gl.DepthMask(true)                         // top cube writes to depth buffer
+	uniColor.Uniform3f(1, 1, 1)                // top cube is at full brightness
+	gl.Disable(gl.STENCIL_TEST)                // top cube always drawn regardless of stencils
+	gl.DrawArrays(gl.TRIANGLES, 0, 36)         // draw top cube
+	gl.Clear(gl.STENCIL_BUFFER_BIT)            // clear stencil (so top cube doesn't matter)
+	gl.Enable(gl.STENCIL_TEST)                 // enable the test
+	gl.StencilFunc(gl.ALWAYS, 1, 0xff)         // the floor will always write 1's
+	gl.StencilOp(gl.KEEP, gl.KEEP, gl.REPLACE) // replace w/ 1 for floor writes
+	gl.StencilMask(0xff)                       // has no effect, but needed 'cause of the 0x00 below
+	gl.DepthMask(false)                        // if this were true, floor would occlude reflection
+	gl.DrawArrays(gl.TRIANGLES, 36, 6)         // draw the floor, as well as stencil
+	gl.StencilFunc(gl.EQUAL, 1, 0xff)          // now set to only draw on stencil 1's
+	gl.StencilMask(0xff)                       // but don't affect the stencil itself (not that it matters, since we clear the stencil)
+
+	m = mathgl.Scale3D(1, 1, -1).Mul4(m)                // reflect the transform
+	m = mathgl.Translate3D(0, 0, -1).Mul4(m)            // and move it below the floor
+	uniModel.UniformMatrix4f(false, (*[16]float32)(&m)) // and set as model transform
+
+	gl.DepthMask(true)                 // bottom cube writes to depth buffer
+	uniColor.Uniform3f(0.3, 0.3, 0.3)  // reflected cube is shady
+	gl.DrawArrays(gl.TRIANGLES, 0, 36) // draw the reflected cube
+
+	// update angle and speed
+	angle += speed / 30
+	speed /= 1.2
+
+	// calculate FPS
+	frames++
+	fps := float32(frames) / t
+	if frames%100 == 0 {
+		fmt.Println("FPS:", fps)
 	}
 }

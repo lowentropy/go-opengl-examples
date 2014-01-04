@@ -10,5 +10,5 @@ uniform float time;
 void main()
 {
   float factor = (sin(time * 3.0) + 1.0) / 2.0;
-  outColor = mix(texture(tex0, Texcoord), texture(tex1, Texcoord), factor);// * vec4(Color, 1.0);
+  outColor = mix(texture(tex0, Texcoord), texture(tex1, Texcoord), factor) * vec4(Color, 1.0);
 }
