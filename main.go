@@ -19,7 +19,6 @@ var (
 	m            mathgl.Mat4f
 	vertexShader gl.Shader
 	fragShader   gl.Shader
-	program      gl.Program
 	color        gl.AttribLocation
 	t0           time.Time
 	window       *glfw.Window
