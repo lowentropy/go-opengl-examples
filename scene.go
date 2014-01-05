@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/Jragonmiris/mathgl"
 	"github.com/go-gl/gl"
 	"time"
@@ -17,7 +18,8 @@ func initCube() {
 	gl.Enable(gl.DEPTH_TEST)
 	loadVertexBuf()
 	progCube = loadProgram("shaders/vertex.vert", "shaders/fragment.frag")
-	attachShaders()
+	bindArrays(progCube, "position", 3, "color", 3, "texcoord", 2)
+	getUniformLocs()
 	loadTextures()
 	setViewAndProj()
 }
@@ -25,6 +27,8 @@ func initCube() {
 func loadTextures() {
 	loadTexture(gl.TEXTURE0, "data/kitten.jpg")
 	loadTexture(gl.TEXTURE1, "data/gopher.png")
+	progCube.GetUniformLocation("tex0").Uniform1i(0)
+	progCube.GetUniformLocation("tex1").Uniform1i(1)
 }
 
 func loadVertexBuf() {
@@ -45,27 +49,27 @@ func loadProgram(vertPath, fragPath string) gl.Program {
 	return program
 }
 
-func attachShaders() {
-	// position: stride 8, size 3, offset 0
-	pos := progCube.GetAttribLocation("position")
-	pos.AttribPointer(3, gl.FLOAT, false, 8*4, uintptr(0))
-	pos.EnableArray()
+func bindArrays(program gl.Program, args ...interface{}) {
+	var i, j, n, size uint
+	size, n = 0, uint(len(args)/2)
+	sizes := make([]uint, n)
+	names := make([]string, n)
+	for i, j = 0, 0; i < n; i, j = i+1, j+2 {
+		names[i] = args[j+0].(string)
+		sizes[i] = uint(args[j+1].(int))
+		size += sizes[i]
+		fmt.Println(names[i], sizes[i]) // XXX
+	}
+	for i, j = 0, 0; i < n; i++ {
+		loc := program.GetAttribLocation(names[i])
+		fmt.Println(size, j)
+		loc.AttribPointer(sizes[i], gl.FLOAT, false, int(size*4), uintptr(j*4))
+		loc.EnableArray()
+		j += sizes[i]
+	}
+}
 
-	// color: stride 8, size 3, offset 3
-	color = progCube.GetAttribLocation("color")
-	color.AttribPointer(3, gl.FLOAT, false, 8*4, uintptr(3*4))
-	color.EnableArray()
-
-	// texcoord: stride 8, size 2, offset 6
-	tc := progCube.GetAttribLocation("texcoord")
-	tc.AttribPointer(2, gl.FLOAT, false, 8*4, uintptr(6*4))
-	tc.EnableArray()
-
-	// bind texture interpolators
-	progCube.GetUniformLocation("tex0").Uniform1i(0)
-	progCube.GetUniformLocation("tex1").Uniform1i(1)
-
-	// get 'time', 'model', and 'overrideColor' variables as global
+func getUniformLocs() {
 	uniTime = progCube.GetUniformLocation("time")
 	uniModel = progCube.GetUniformLocation("model")
 	uniColor = progCube.GetUniformLocation("overrideColor")
