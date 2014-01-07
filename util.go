@@ -70,7 +70,7 @@ func loadShader(kind gl.GLenum, path string) gl.Shader {
 	return shader
 }
 
-func loadProgram(vertPath, fragPath string) (program gl.Program) {
+func loadProgram(vertPath, fragPath string, other ...string) (program gl.Program) {
 	// load the shaders
 	vertexShader := loadShader(gl.VERTEX_SHADER, vertPath)
 	fragShader := loadShader(gl.FRAGMENT_SHADER, fragPath)
@@ -79,6 +79,14 @@ func loadProgram(vertPath, fragPath string) (program gl.Program) {
 	program = gl.CreateProgram()
 	program.AttachShader(vertexShader)
 	program.AttachShader(fragShader)
+
+	// load geom shader if present
+	if len(other) > 0 {
+		geomShader := loadShader(gl.GEOMETRY_SHADER, other[0])
+		program.AttachShader(geomShader)
+	}
+
+	// bind out color, link, use
 	program.BindFragDataLocation(0, "outColor")
 	program.Link()
 	program.Use()

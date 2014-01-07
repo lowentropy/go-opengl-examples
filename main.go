@@ -19,10 +19,6 @@ var (
 	window *glfw.Window
 	m      mathgl.Mat4f
 
-	fb gl.Framebuffer
-	tb gl.Texture
-	rb gl.Renderbuffer
-
 	tex0, tex1                  gl.Texture
 	sceneProg, screenProg       gl.Program
 	vaoCube, vaoQuad            gl.VertexArray
