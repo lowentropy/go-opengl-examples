@@ -43,7 +43,7 @@ func loadImageData(path string) ([]byte, int, int) {
 	return data, w, h
 }
 
-func loadTexture(active gl.GLenum, path string) {
+func loadTexture(active gl.GLenum, path string) gl.Texture {
 	tex := gl.GenTexture()
 	gl.ActiveTexture(active)
 	tex.Bind(gl.TEXTURE_2D)
@@ -53,6 +53,7 @@ func loadTexture(active gl.GLenum, path string) {
 	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
 	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
 	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR)
+	return tex
 }
 
 func loadShader(kind gl.GLenum, path string) gl.Shader {
@@ -98,6 +99,7 @@ func bindArrays(program gl.Program, args ...interface{}) {
 	for i, j = 0, 0; i < n; i++ {
 		pos := program.GetAttribLocation(vars[i])
 		pos.AttribPointer(lens[i], gl.FLOAT, false, int(size*4), uintptr(j*4))
+		pos.EnableArray()
 		j += lens[i]
 	}
 }

@@ -9,20 +9,20 @@ import (
 func drawScene() {
 	setTime()
 	drawCube()
-	// drawQuad()
+	drawQuad()
 	update()
 }
 
 func drawCube() {
 	// bind framebuffer and scene
-	// fb.Bind()
+	fb.Bind()
 	vaoCube.Bind()
 	sceneProg.Use()
 
 	clearFrame()
 	drawTopCube()
-	// drawFloor()
-	// drawBottomCube()
+	drawFloor()
+	drawBottomCube()
 }
 
 func clearFrame() {
@@ -32,6 +32,7 @@ func clearFrame() {
 }
 
 func drawTopCube() {
+	activateTextures()
 	m = mathgl.HomogRotate3DZ(angle)   // compute rotation matrix
 	transform(&m)                      // store
 	uniColor.Uniform3f(1, 1, 1)        // top cube is at full brightness
@@ -56,8 +57,15 @@ func drawBottomCube() {
 	noStencils()
 }
 
+func activateTextures() {
+	gl.ActiveTexture(gl.TEXTURE0)
+	tex0.Bind(gl.TEXTURE_2D)
+	gl.ActiveTexture(gl.TEXTURE1)
+	tex1.Bind(gl.TEXTURE_2D)
+}
+
 func drawQuad() {
-	// gl.Framebuffer(0).Bind()
+	gl.Framebuffer(0).Bind()
 	vaoQuad.Bind()
 	gl.Disable(gl.DEPTH_TEST)
 	screenProg.Use()

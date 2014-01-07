@@ -9,7 +9,7 @@ import (
 func initScene() {
 	t0 = time.Now()
 	initCube()
-	// initQuad()
+	initQuad()
 }
 
 func initCube() {
@@ -20,7 +20,7 @@ func initCube() {
 	gl.BufferData(gl.ARRAY_BUFFER, len(cubeArray)*4, &cubeArray, gl.STATIC_DRAW)
 	loadTextures()
 	sceneProg = loadSceneProgram()
-	// initFramebuffer()
+	initFramebuffer()
 	setViewAndProj(sceneProg)
 }
 
@@ -53,8 +53,8 @@ func initFramebuffer() {
 }
 
 func loadTextures() {
-	loadTexture(gl.TEXTURE0, "data/kitten.jpg")
-	loadTexture(gl.TEXTURE1, "data/gopher.png")
+	tex0 = loadTexture(gl.TEXTURE0, "data/kitten.jpg")
+	tex1 = loadTexture(gl.TEXTURE1, "data/gopher.png")
 }
 
 func loadSceneProgram() (program gl.Program) {
