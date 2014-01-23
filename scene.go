@@ -45,7 +45,14 @@ func loadProgram(vertPath, fragPath string) gl.Program {
 	program.AttachShader(fragShader)
 	program.BindFragDataLocation(0, "outColor")
 	program.Link()
+	if program.Get(gl.LINK_STATUS) != gl.TRUE {
+		panic(fmt.Sprintf("can't link program: %s, %s: %s", vertPath, fragPath, program.GetInfoLog()))
+	}
 	program.Use()
+	program.DetachShader(vertexShader)
+	program.DetachShader(fragShader)
+	vertexShader.Delete()
+	fragShader.Delete()
 	return program
 }
 
